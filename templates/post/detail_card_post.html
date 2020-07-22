@@ -1,0 +1,29 @@
+<div class="col-lg-8 mx-auto">
+  <div class="shadow rounded p-3">
+      <div class="d-flex mt-2">
+          <img class="rounded-circle shadow" src="{{post.author.headshot.url}}" height="50" alt="{{post.author}} Image">
+          <div class="mx-2">
+              <div class="font-weight-bold">{{post.author.user.username}}</div>
+              <div class="text-muted small">{{post.date_updated|timesince}}</div>
+          </div>
+          {% include 'post/social_dropdown.html' %}
+      </div>
+        <div class="mx-5">
+            <div class="bg-light rounded">
+                <div class="h5 text-center mt-3">{{post.title}}</div>
+            </div>
+            <div class="row justify-content-between">
+                {% for image in post.get_images %}
+                <div class="overflow-hider col-sm-6 my-auto mx-auto px-0">
+                    <img class="img-fluid rounded inlarge-scale w-100 img-thumbnail" src="{{image.thumbnail.url}}" alt="Post Image">
+                </div>
+                {% endfor %}
+            </div>
+            <section class="text-justify">
+              {{post.content|safe}}
+            </section>
+         </div>
+         {% include 'post/comment_post.html' %}
+  </div>
+  <button class="jumbotron" onclick="topFunction()" id="backToTop" title="Go to top"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></button>
+</div>
