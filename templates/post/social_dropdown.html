@@ -5,6 +5,34 @@
     <div class="dropdown-menu" aria-labelledby="social-dropdown-menu">
         <a class="dropdown-item small" href="#"><i class="fa fa-superpowers" aria-hidden="true"></i> Superlike</a>
         <a class="dropdown-item small" href="{{post.get_update_url}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update</a>
-        <a class="dropdown-item small" href="{{post.get_delete_url}}"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+        <button type="button" class="dropdown-item small" data-toggle="modal" data-target="#deleteModal-{{post.pk}}">
+            <i class="fa fa-trash-o" aria-hidden="true"></i> Delete
+          </button>
     </div>
 </div>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="deleteModal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-{{post.pk}}Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModal-{{post.pk}}Label">Action is irreversible:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to <b>DELETE</b> <i>{{post.title}}</i> ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form action="{{post.get_delete_url}}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger float-right">Delete</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
