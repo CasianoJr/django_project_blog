@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Post, Comment, CascadeComment, Image
+from .models import Category, Post, Comment, ChildComment, Image
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -13,5 +13,5 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Comment)
-admin.site.register(CascadeComment)
+admin.site.register(ChildComment)
 admin.site.register(Image)

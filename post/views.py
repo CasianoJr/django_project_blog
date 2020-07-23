@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from .forms import PostCreateForm
 
 class PostHomeView(ListView):
     # model = Post
@@ -17,35 +18,63 @@ class PostHomeView(ListView):
 
 
 class PostDetailView(DetailView):
-    # model = Post
     queryset = Post.objects.all()
     template_name = 'post/post_detail.html'
     context_object_name = 'post'
 
- 
-
-
-
-@method_decorator(login_required, name='dispatch')
-class PostCreatView(CreateView):
+class PostCreateView(CreateView):
     model = Post
-    fields = ['title']
-    template_name = 'post/post_detail.html'
-    context_object_name = 'object'
+    fields = ('title', 'content', 'featured', 'category',)
+    template_name = 'post/post_create.html'
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
 
+    # @method_decorator(login_required)
+    # def dispatch(self, *args, **kwargs):
+    #     super().dispatch(*args, **kwargs)
+    
+
+# @method_decorator(login_required, name='dispatch')
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView,):
+    queryset = Post.objects.all()
+    form_class = PostCreateForm
+    template_name = 'post/post_update.html'
+    
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user.profile == post.author:
+            return True
+        return False
+
+
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('post-home')
+    template_name = 'post/post_delete.html'
+    context_object_name = 'post'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user.profile == post.author:
+            return True
+        return False
+
+class PostDummpyView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['post_list']= Post.objects.all()
         context['title']= 'Title'
         return context
-        
-class PostUpdateView(UpdateView):
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        super().dispatch(*args, **kwargs)
     
-    # Update specific may in detail
+      # redefine the queryset
+    def get_queryset(self):
+        # self.publisher= get_object_or_404(Post, name=self.kwargs['publisher'])
+        # return Post.objects.filter(publisher=self.publisher)
+        pass
+       # Update specific may in detail
     def get_object(self): 
         obj - super().get_object()
         obj.date_updated = timezone.now()
@@ -58,19 +87,3 @@ class PostUpdateView(UpdateView):
         context['title']= 'Title'
         return context
     
-    # redefine the queryset
-    def get_queryset(self):
-        # self.publisher= get_object_or_404(Post, name=self.kwargs['publisher'])
-        # return Post.objects.filter(publisher=self.publisher)
-        pass
-
-
-class PostDeleteView(DeleteView, LoginRequiredMixin, UserPassesTestMixin):
-    model = Post
-    success_url = reverse_lazy('nameclass')
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False

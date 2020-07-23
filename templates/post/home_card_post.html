@@ -1,5 +1,4 @@
-<div class="col-lg-8 mx-auto">
-    {% for post in posts %}
+{% for post in posts %}
   <div class="shadow rounded p-3">
       <div class="d-flex mt-2">
           <img class="rounded-circle shadow" src="{{post.author.headshot.url}}" height="50" alt="{{post.author}} Image">
@@ -34,5 +33,3 @@
          {% include 'post/comment_post.html' %}
   </div>
   {% endfor %}
-  <button class="jumbotron" onclick="topFunction()" id="backToTop" title="Go to top"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></button>
-</div>

@@ -2,8 +2,13 @@
     {% include 'base/head.html' %}
  <body>
     {% include 'base/navbar.html' %}
+    <div class="col-md-10 col-lg-8 mx-auto">
         {% block content %} 
         {% endblock content %}
+        <button class="jumbotron" onclick="topFunction()" id="backToTop" title="Go to top">
+            <i class="fa fa-arrow-circle-up" aria-hidden="true"></i>
+        </button>
+    </div>
     {% include 'base/footer.html' %}
     {% include 'base/script.html' %}
 </body>

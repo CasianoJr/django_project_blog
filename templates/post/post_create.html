@@ -1,0 +1,9 @@
+{% extends 'base/base.html' %} {% block content %}
+{% load crispy_forms_tags %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form.media}}
+        {{form|crispy}}
+        <button class="btn btn-outline-success">Create</button>
+    </form>
+{% endblock content %}

@@ -1,0 +1,9 @@
+{% extends 'base/base.html' %} {% block content %}
+{% load crispy_forms_tags %}
+    {% include 'post/detail_card_post.html' %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="text-center">Are you suer you want to delelte '{{post.title}}'?</div>
+        <button class="btn btn-outline-danger float-right">Delete</button>
+    </form>
+{% endblock content %}
