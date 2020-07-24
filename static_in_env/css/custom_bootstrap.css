@@ -20,7 +20,7 @@
     transform: scale(1.5, 1.5);
 }
 
-  #backToTop {
+#backToTop {
     display: none;
     position: fixed;
     bottom: 20px;

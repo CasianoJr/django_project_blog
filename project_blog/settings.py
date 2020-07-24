@@ -138,7 +138,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Redirect after successful login
-# LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'post-home'
 
 # Redirect when uses @login_required property
 # LOGIN_URL = 'user-login'
