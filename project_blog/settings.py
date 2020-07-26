@@ -146,7 +146,7 @@ LOGIN_REDIRECT_URL = 'post-home'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 TINYMCE_DEFAULT_CONFIG = {
-    'height': 360,
+    'height': 300,
     'width': 'auto',
     'cleanup_on_startup': True,
     'custom_undo_redo_levels': 20,

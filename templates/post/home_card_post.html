@@ -6,7 +6,7 @@
               <div class="font-weight-bold">{{post.author.user.username}}</div>
               <div class="text-muted small">{{post.date_updated|timesince}}</div>
           </div>
-          {% include 'post/social_dropdown.html' %}
+          {% include 'post/header_post_dropdown.html' %}
       </div>
       <a class="card-link text-dark" style="" href="{{post.get_absolute_url}}">
         <div class="mx-5">
@@ -25,11 +25,13 @@
             <section class="text-justify">
               {{post.content|safe|truncatewords_html:60}}
               {% if post.content|length > 100 %}
-                  <a href="123" class="p-0 btn text-muted float-right">Read more</a>
+                  <a href="{{post.get_absolute_url}}" class="p-0 btn text-muted float-right">Read more</a>
               {% endif %}
             </section>
          </div>
         </a>
-         {% include 'post/comment_post.html' %}
+        <div id="footer_post_button_{{post.pk}}">
+          {% include 'post/footer_post_buttons.html' %}
+        </div>
   </div>
   {% endfor %}

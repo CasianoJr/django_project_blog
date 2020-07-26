@@ -8,6 +8,9 @@
       <a class="navbar-brand font-weight-bold small py-0" href="{% url 'post-home' %}">Exodus</a>
       <ul class="navbar-nav ml-auto">
         <li class="nav-pills">
+          <a class="nav-link small mt-1" href="#search_post" id="searchBtn"  data-toggle="modal"></i> <i class="fa fa-search" aria-hidden="true">&nbsp;</i></a>
+        </li>
+        <li class="nav-pills">
           <a class="nav-link small {% if request.path == '/' %} active {% endif %}" href="{% url 'post-home'%}"><i class="fa fa-home" aria-hidden="true"></i> Home <span class="sr-only">(current)</span></a>
         </li>
         {% if user.is_authenticated %}
@@ -17,10 +20,13 @@
         <li class="nav-pills dropdown dropleft mr-4">
           <a class="nav-link small" id="navbarAccts" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Account</a>
           <div class="dropdown-menu" aria-labelledby="navbarAccts">
-            <a class="dropdown-item small" href="{% url 'account_change_password' %}"><i class="fa fa-key" aria-hidden="true"></i> Change Password</a>
+            <a class="dropdown-item small" href="{% url 'account_change_password' %}"><i class="fa fa-key" aria-hidden="true"></i> Change PW</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item small" href="{% url 'account_logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
           </div>
+        </li>
+        <li class="nav-pills">
+          <span class="nav-link small">Hi {{user.username}}!</span>
         </li>
           {% else %}
           <li class="nav-item">
@@ -47,13 +53,20 @@
     {% endfor %}
 {% endif %}
 
-<form action="" class="mx-auto col-8 mt-1">
-  <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <button id="button-addon2" type="submit" class="btn btn-link text-warning"><i class="fa fa-search"></i></button>
-      </div>
-      <input type="search" placeholder="What're you searching for?" aria-describedby="button-addon2" class="form-control form-control-search  border-0 bg-light">
+<!-- Modal -->
+<div class="modal fade" id="search_post" tabindex="-1" role="dialog" aria-labelledby="search_postLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <form action="" class="">
+        <div class="rounded rounded-pill shadow-lg">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button id="button-addon2" type="submit" class="btn btn-link text-warning"><i class="fa fa-search"></i></button>
+            </div>
+            <input id="searchOn" type="search" placeholder="What're you searching for?" aria-describedby="button-addon2" class="form-control form-control-search  border-0 bg-light">
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-</form>
+</div>

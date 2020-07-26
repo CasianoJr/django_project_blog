@@ -6,6 +6,7 @@ from django.db.models.signals import pre_save
 from django.utils.text import slugify
 import random
 from django.dispatch import receiver
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -27,6 +28,7 @@ class Post(models.Model):
     featured = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     slug = models.SlugField(blank=True, unique=True)
+    like = models.ManyToManyField(User, default=None, blank=True)
     date_updated = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)
     
@@ -45,13 +47,12 @@ class Post(models.Model):
     def get_delete_url(self):
         return reverse("post-delete", kwargs={"slug": self.slug})
 
+    def get_like_url(self):
+        return reverse("post-like", kwargs={"slug": self.slug})
+
     def get_slug(self):
         return self.title[:10]
 
-    # def delete(self, *args, **kwargs):
-    #     if self.thumbnail:
-    #         self.thumbnail.delete()
-    #     super().delete(*args, **kwargs)
 
     @property
     def get_comments(self):
@@ -73,6 +74,12 @@ class Image(models.Model):
     
     def get_slug(self):
         return self.caption[:10]
+    
+        # def delete(self, *args, **kwargs):
+    #     if self.thumbnail:
+    #         self.thumbnail.delete()
+    #     super().delete(*args, **kwargs)
+
 
 class Comment(models.Model):
     author = models.ForeignKey(
@@ -84,10 +91,13 @@ class Comment(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.name
+        return f'{self.author } - {self.comment[:15]} TO {self.post.title[:15]} '
 
     def get_slug(self):
         return self.comment[:10]
+
+    def get_child_comments(self):
+        return self.childcomment_set.all()
 
 class ChildComment(models.Model):
     author = models.ForeignKey(
@@ -98,7 +108,7 @@ class ChildComment(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.name
+        return f'{self.author} - {self.comment[:15]} TO {self.parent.comment[:15]}'
 
     def get_slug(self):
         return self.comment[:10] 

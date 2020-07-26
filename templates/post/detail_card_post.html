@@ -5,7 +5,7 @@
               <div class="font-weight-bold">{{post.author.user.username}}</div>
               <div class="text-muted small">{{post.date_updated|timesince}}</div>
           </div>
-          {% include 'post/social_dropdown.html' %}
+          {% include 'post/header_post_dropdown.html' %}
       </div>
         <div class="mx-5">
             <div class="bg-light rounded">
@@ -22,6 +22,9 @@
               {{post.content|safe}}
             </section>
          </div>
-         {% include 'post/comment_post.html' %}
+         <div id="footer_post_button_{{post.pk}}">
+            {% include 'post/footer_post_buttons.html' %}
+          </div>
+      
   </div>
   <button class="jumbotron" onclick="topFunction()" id="backToTop" title="Go to top"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></button>

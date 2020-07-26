@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse, redirect, HttpResponse, Http404
 from .models import Post
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -7,14 +7,43 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .forms import PostCreateForm
+from django.http import HttpResponseBadRequest
 
 class PostHomeView(ListView):
-    # model = Post
     queryset = Post.objects.select_related('author', 'author__user')
     template_name = 'post/post_home.html'
     context_object_name = 'posts'
     ordering = ['-date_created']
-    paginate_by = 5
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PostCreateForm
+        return context
+   
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            form.instance.author = self.request.user.profile
+            form.save()
+            return redirect(reverse("post-detail", kwargs={
+                'slug': form.instance.slug}))
+
+def post_like_view(request, slug):
+    if not request.user.is_authenticated:
+        return HttpResponseBadRequest('Not authenticated')
+    if request.is_ajax():
+        post = get_object_or_404(Post, slug=slug)
+        if request.user in post.like.all():
+            post.like.remove(request.user)
+        else:
+            post.like.add(request.user)
+        return render(request, 'post/footer_post_buttons.html', {"post": post})
+    else:
+        raise Http404
+    #  HttpResponse('success like')
+    # return redirect(reverse('post-detail', kwargs={'slug': post.slug}))
 
 
 class PostDetailView(DetailView):

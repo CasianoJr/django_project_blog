@@ -9,9 +9,14 @@ class PostAdmin(admin.ModelAdmin):
     list_editable = ['slug']
     prepopulated_fields = {'slug': ('title',)}
 
+class CommentAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('comment',)}
+
+class ChildCommentAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('comment',)}
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
-admin.site.register(Comment)
-admin.site.register(ChildComment)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(ChildComment, ChildCommentAdmin)
 admin.site.register(Image)
