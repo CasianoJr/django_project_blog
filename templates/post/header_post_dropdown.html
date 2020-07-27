@@ -4,16 +4,18 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="social-dropdown-menu">
         <a class="dropdown-item small" href="#"><i class="fa fa-superpowers" aria-hidden="true"></i> Superlike</a>
-        <a class="dropdown-item small" href="{{post.get_update_url}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update</a>
+        {% if user.profile == post.author %}
+        <a href="." data-url='{{post.get_update_url}}' class="update_a_post dropdown-item small" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update</a>
         <button type="button" class="dropdown-item small" data-toggle="modal" data-target="#deleteModal-{{post.pk}}">
             <i class="fa fa-trash-o" aria-hidden="true"></i> Delete
           </button>
+          {% endif %}
     </div>
 </div>
 
 
 
-  <!-- Modal -->
+  <!-- Modal for Delete -->
   <div class="modal fade" id="deleteModal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-{{post.pk}}Label" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

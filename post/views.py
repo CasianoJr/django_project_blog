@@ -8,13 +8,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from .forms import PostCreateForm
 from django.http import HttpResponseBadRequest
+# from django.views.decorators.csrf import csrf_exempt
 
 class PostHomeView(ListView):
     queryset = Post.objects.select_related('author', 'author__user')
     template_name = 'post/post_home.html'
     context_object_name = 'posts'
     ordering = ['-date_created']
-    paginate_by = 2
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,6 +31,7 @@ class PostHomeView(ListView):
             return redirect(reverse("post-detail", kwargs={
                 'slug': form.instance.slug}))
 
+# @csrf_exempt
 def post_like_view(request, slug):
     if not request.user.is_authenticated:
         return HttpResponseBadRequest('Not authenticated')
@@ -41,24 +43,34 @@ def post_like_view(request, slug):
             post.like.add(request.user)
         return render(request, 'post/footer_post_buttons.html', {"post": post})
     else:
-        raise Http404
-    #  HttpResponse('success like')
-    # return redirect(reverse('post-detail', kwargs={'slug': post.slug}))
+        return HttpResponseBadRequest('Bad Request')
 
 
 class PostDetailView(DetailView):
     queryset = Post.objects.all()
     template_name = 'post/post_detail.html'
     context_object_name = 'post'
+    
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(request, *args, **kwargs)
+        else:
+            return HttpResponseBadRequest('Bad Request')
 
 class PostCreateView(CreateView):
     model = Post
-    fields = ('title', 'content', 'featured', 'category',)
-    template_name = 'post/post_create.html'
+    # fields = ('title', 'content', 'featured', 'category',)
+    # template_name = 'post/post_create.html'
     
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
+    
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(request, *args, **kwargs)
+        else:
+            return HttpResponseBadRequest('Bad Request')
 
     # @method_decorator(login_required)
     # def dispatch(self, *args, **kwargs):
@@ -70,6 +82,12 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView,):
     queryset = Post.objects.all()
     form_class = PostCreateForm
     template_name = 'post/post_update.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(request, *args, **kwargs)
+        else:
+            return HttpResponseBadRequest('Bad Request')
     
     def test_func(self):
         post = self.get_object()

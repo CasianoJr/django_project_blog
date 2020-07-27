@@ -1,9 +1,18 @@
-{% extends 'base/base.html' %} {% block content %}
 {% load crispy_forms_tags %}
-    <form action="" method="POST" enctype="multipart/form-data">
+<div class="modal-header">
+    <h5 class="modal-title" id="create_postLabel">Updating a post:</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form action="{{object.get_update_url}}" method="POST">
+    <div class="modal-body">
         {% csrf_token %}
         {{form.media}}
         {{form|crispy}}
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button class="btn btn-outline-primary">Update</button>
-    </form>
-{% endblock content %}
+    </div>
+</form>

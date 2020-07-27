@@ -1,5 +1,6 @@
+<div class="infinite-container">
 {% for post in posts %}
-  <div class="shadow rounded p-3">
+  <div class="shadow rounded p-3 infinite-item">
       <div class="d-flex mt-2">
           <img class="rounded-circle shadow" src="{{post.author.headshot.url}}" height="50" alt="{{post.author}} Image">
           <div class="mx-2">
@@ -8,7 +9,7 @@
           </div>
           {% include 'post/header_post_dropdown.html' %}
       </div>
-      <a class="card-link text-dark" style="" href="{{post.get_absolute_url}}">
+      <a class="card-link text-dark post_detail_view" data-url='{{post.get_absolute_url}}' href=".">
         <div class="mx-5">
           <div class="row">
             <div class="col order-{% cycle '1' '2' %} bg-light rounded">
@@ -35,3 +36,4 @@
         </div>
   </div>
   {% endfor %}
+</div>
