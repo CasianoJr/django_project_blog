@@ -1,7 +1,8 @@
 {% for child_comment in comment.get_child_comments %}
 <div class="container mt-0 pl-5">
     <div class="d-flex border p-2 rounded bg-light">
-        <img class="rounded-circle shadow" src="{{child_comment.author.headshot.url}}" height="40" alt="{{child_comment.author}} Image">
+        <img class="rounded-circle shadow" src="{{child_comment.author.headshot.url}}" height="40"
+            alt="{{child_comment.author}} Image">
         <div class="mx-2">
             <div class="font-weight-bold">{{child_comment.author.user.username}}</div>
             <div class="text-muted small">{{child_comment.date_created|timesince}}</div>

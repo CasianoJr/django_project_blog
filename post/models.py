@@ -75,10 +75,10 @@ class Image(models.Model):
     def get_slug(self):
         return self.caption[:10]
     
-        # def delete(self, *args, **kwargs):
-    #     if self.thumbnail:
-    #         self.thumbnail.delete()
-    #     super().delete(*args, **kwargs)
+    def delete(self, *args, **kwargs):
+        if self.thumbnail:
+            self.thumbnail.delete()
+        super().delete(*args, **kwargs)
 
 
 class Comment(models.Model):

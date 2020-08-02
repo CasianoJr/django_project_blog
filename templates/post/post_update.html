@@ -2,10 +2,10 @@
 <div class="modal-header">
     <h5 class="modal-title" id="create_postLabel">Updating a post:</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
+        <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<form action="{{object.get_update_url}}" method="POST">
+<form action="{{post.get_update_url}}" method="POST">
     <div class="modal-body">
         {% csrf_token %}
         {{form.media}}

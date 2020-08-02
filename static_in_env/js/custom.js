@@ -17,7 +17,7 @@ $(document).on("click", ".like_a_post", function (e) {
   });
 });
 
-// Update a post 
+// Update a post
 $(document).on("click", ".update_a_post", function (e) {
   e.preventDefault();
   var url = $(this).attr("data-url");
@@ -25,8 +25,8 @@ $(document).on("click", ".update_a_post", function (e) {
     url: url,
     dataType: "html",
     success: function (data) {
-      $("#update_or_create").html(data);
-      $("#create_post").modal('show');
+      $("#reusable_modal_content").html(data);
+      $("#reusable_modal").modal("show");
     },
   });
 });
@@ -39,29 +39,74 @@ $(document).on("click", ".post_detail_view", function (e) {
     url: url,
     dataType: "html",
     success: function (data) {
-      $("#update_or_create").html(data);
-      $("#create_post").modal('show');
+      $("#reusable_modal_content").html(data);
+      $("#reusable_modal").modal("show");
+    },
+  });
+});
+$(document).on("click", ".comment_a_post", function (e) {
+  e.preventDefault();
+  var url = $(this).attr("data-url");
+  $.ajax({
+    url: url,
+    dataType: "html",
+    success: function (data) {
+      $("#reusable_modal_content").html(data);
+      $("#reusable_modal").modal("show").delay();
+      $("#reusable_modal").on("shown.bs.modal", function () {
+        $("#comment_input").focus();
+      });
     },
   });
 });
 
-
-
 // Infinite scroll
-var infinite = new Waypoint.Infinite({
-  element: $(".infinite-container")[0],
-  handler: function (direction) {},
-  offset: "bottom-in-view",
 
-  onBeforePageLoad: function () {
-    $(".spinner-border").show();
-  },
-  onAfterPageLoad: function () {
-    $(".spinner-border").hide();
-  },
+$(document).ready(function () {
+  var infinite = new Waypoint.Infinite({
+    element: $(".infinite-container")[0],
+    handler: function (direction) {},
+    offset: "bottom-in-view",
+
+    onBeforePageLoad: function () {
+      $(".spinner-border").show();
+    },
+    onAfterPageLoad: function () {
+      $(".spinner-border").hide();
+    },
+  });
 });
 
-//   $(document).ready(function() {
+// Image upload
+function previewFiles() {
+  var preview = document.querySelector("#preview");
+  var files = document.querySelector("input[type=file]").files;
+  function readAndPreview(file) {
+    if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+      var reader = new FileReader();
+      reader.addEventListener(
+        "load",
+        function () {
+          var image = new Image();
+          image.className = "m-2";
+          image.height = 100;
+          image.title = file.name;
+          image.src = this.result;
+          preview.appendChild(image);
+        },
+        false
+      );
+      reader.readAsDataURL(file);
+    }
+  }
+  if (files) {
+    if (files.length > 5) {
+      alert("We suggest you only upload 5 photos below");
+    }
+    [].forEach.call(files, readAndPreview);
+  }
+}
+
 //     $("#content").hide();
 //     $("#buttonSubmit").click(function(e) {
 //       e.preventDefault();
@@ -81,7 +126,6 @@ var infinite = new Waypoint.Infinite({
 //         }
 //       });
 //     });
-//   });
 
 // var name = $("#id_name").val();
 // var csrf_token = $("input[name=csrfmiddlewaretoken]").val();

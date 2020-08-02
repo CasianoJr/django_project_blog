@@ -1,40 +1,45 @@
 <div class="dropdown ml-auto mr-2 dropleft">
-    <button class="btn btn-sm" type="button" id="social-dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+  <button class="btn btn-sm" type="button" id="social-dropdown-menu" data-toggle="dropdown" aria-haspopup="true"
+    aria-expanded="false">
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="social-dropdown-menu">
+    <a class="dropdown-item small" href="#"><i class="fa fa-superpowers" aria-hidden="true"></i> Superlike</a>
+    {% if user.profile == post.author %}
+    <a href="." data-url="{{post.get_update_url}}" class="update_a_post dropdown-item small"><i
+        class="fa fa-pencil-square-o" aria-hidden="true"></i> Update</a>
+    <button type="button" class="dropdown-item small" data-toggle="modal" data-target="#deleteModal-{{post.pk}}">
+      <i class="fa fa-trash-o" aria-hidden="true"></i> Delete
     </button>
-    <div class="dropdown-menu" aria-labelledby="social-dropdown-menu">
-        <a class="dropdown-item small" href="#"><i class="fa fa-superpowers" aria-hidden="true"></i> Superlike</a>
-        {% if user.profile == post.author %}
-        <a href="." data-url='{{post.get_update_url}}' class="update_a_post dropdown-item small" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update</a>
-        <button type="button" class="dropdown-item small" data-toggle="modal" data-target="#deleteModal-{{post.pk}}">
-            <i class="fa fa-trash-o" aria-hidden="true"></i> Delete
-          </button>
-          {% endif %}
-    </div>
+    {% endif %}
+  </div>
 </div>
 
-
-
-  <!-- Modal for Delete -->
-  <div class="modal fade" id="deleteModal-{{post.pk}}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-{{post.pk}}Label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteModal-{{post.pk}}Label">Action is irreversible:</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to <b>DELETE</b> <i>{{post.title}}</i> ?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <form action="{{post.get_delete_url}}" method="POST">
-            {% csrf_token %}
-            <button class="btn btn-danger float-right">Delete</button>
+<!-- Modal for Delete -->
+<div class="modal fade" id="deleteModal-{{post.pk}}" tabindex="-1" role="dialog"
+  aria-labelledby="deleteModal-{{post.pk}}Label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModal-{{post.pk}}Label">
+          Action is irreversible:
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to <b>DELETE</b> <i>{{post.title}}</i> ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <form action="{{post.get_delete_url}}" method="POST">
+          {% csrf_token %}
+          <button class="btn btn-danger float-right">Delete</button>
         </form>
-        </div>
       </div>
     </div>
   </div>
+</div>
