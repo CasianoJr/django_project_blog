@@ -1,0 +1,10 @@
+{% extends 'base/base.html' %}
+{% block content %}
+    {% include 'post/modals_ajax.html' %}
+    {% include 'post/home_card_post.html' %}
+    {% include 'base/infinite_scroll.html' %}
+    {% comment %} 
+    <!-- {% include 'base/pagination.html' %} -->
+    {% endcomment %}
+
+{% endblock content %}

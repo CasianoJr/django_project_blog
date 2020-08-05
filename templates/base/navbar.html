@@ -15,7 +15,7 @@
         </li>
         {% if user.is_authenticated %}
         <li class="nav-pills">
-          <a class="nav-link small {% if request.path == '/profile/' %} active {% endif %}" href="{% url 'post-home'%}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+          <a class="nav-link small {% if request.path == '/user/profile/' %} active {% endif %}" href="{% url 'user-profile'%}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
         </li>
         <li class="nav-pills dropdown dropleft mr-4">
           <a class="nav-link small" id="navbarAccts" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Account</a>

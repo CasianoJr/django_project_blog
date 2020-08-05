@@ -44,6 +44,7 @@ $(document).on("click", ".post_detail_view", function (e) {
     },
   });
 });
+// Comment a post 
 $(document).on("click", ".comment_a_post", function (e) {
   e.preventDefault();
   var url = $(this).attr("data-url");
@@ -54,18 +55,34 @@ $(document).on("click", ".comment_a_post", function (e) {
       $("#reusable_modal_content").html(data);
       $("#reusable_modal").modal("show").delay();
       $("#reusable_modal").on("shown.bs.modal", function () {
-        $("#comment_input").focus();
+        // $('#reusable_modal').animate({scrollTop: $(document).height()}, 400)
+        $('#reusable_modal').animate({ scrollTop: $('.mx-5').height() }, 400, function () {
+          $("#comment_input").focus();
+        })
       });
     },
   });
 });
 
-// Infinite scroll
+// Copy a link 
+$(document).on("click", ".copy_post_link", function (e) {
+  e.preventDefault();
+  var dummy = document.createElement('input'), text = window.location.hostname + ":" + window.location.port +  $(this).attr("data-url");
+  // window.location.href;
+  document.body.appendChild(dummy);
+  dummy.value = text;
+  dummy.select();
+  document.execCommand('copy');
+  document.body.removeChild(dummy);
+  
+});
 
 $(document).ready(function () {
+
+  // Infinite scroll
   var infinite = new Waypoint.Infinite({
     element: $(".infinite-container")[0],
-    handler: function (direction) {},
+    handler: function (direction) { },
     offset: "bottom-in-view",
 
     onBeforePageLoad: function () {
@@ -75,6 +92,12 @@ $(document).ready(function () {
       $(".spinner-border").hide();
     },
   });
+
+  // Tool Tip 
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+
 });
 
 // Image upload
