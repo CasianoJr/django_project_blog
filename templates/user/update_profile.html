@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+    {{ form.media }}
+    <form action="." method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <img class="img-fluid w-50" src="{{ form.instance.headshot.url }}" >
+        {{ formset.management_form }}
+        {% for bio in formset %}
+        {{bio|crispy}}
+        <hr>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary" value="Submit"></form>
+{% endblock content %}

@@ -6,8 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import PostCreateForm, CommentForm
+from .forms import PostCreateForm, CommentForm, ChildCommentForm, PostImageFormSet
 from django.http import HttpResponseBadRequest
+from django.db.models import Q
 # from django.views.decorators.csrf import csrf_exempt
 
 
@@ -73,7 +74,8 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm
         return context
-
+        
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         post = self.get_object()
         form = CommentForm(request.POST or None)
@@ -110,6 +112,11 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView,):
     form_class = PostCreateForm
     template_name = 'post/post_update.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['formset'] = PostImageFormSet(instance=self.get_object())
+        return context
+
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             return super().get(request, *args, **kwargs)
@@ -122,6 +129,11 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView,):
             return True
         return False
 
+    def form_valid(self, form):
+        formset = PostImageFormSet(self.request.POST, self.request.FILES, instance=self.get_object())
+        if formset.is_valid():
+            formset.save()
+        return super().form_valid(form)
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
@@ -133,15 +145,45 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-# class PostDummpyView(DetailView):
-#         pass
-      # redefine the queryset
-    # def get_queryset(self)
-        # self.publisher= get_object_or_404(Post, name=self.kwargs['publisher'])
-        # return Post.objects.filter(publisher=self.publisher)
-       # Update specific may in detail
-    # def get_object(self):
-        # obj - super().get_object()
-        # obj.date_updated = timezone.now()
-        # obj.save
-        # return obj
+# @csrf_exempt
+def search_post(request):
+    queryset = Post.objects.all()
+    latest_post = queryset.order_by('-date_updated')
+    query = request.GET.get('search')
+    if query:
+        queryset = queryset.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(category__name__icontains=query)
+        ).distinct()
+    else:
+        queryset = None
+    context = {
+        'posts': queryset,
+        'search_history' : query,
+        'latest_post': latest_post
+    }
+    return render(request, 'post/search_post.html', context)
+
+def childcomment_create(request,  comment_slug, post_slug):
+    comment = get_object_or_404(Comment, slug=comment_slug)
+    post = get_object_or_404(Post, slug=post_slug)
+    form = ChildCommentForm(request.POST or None)
+    if request.is_ajax():
+        context = {'form': form, 
+            'comment':comment,
+            'post': post,
+            }
+        return render(request, 'post/child_comment_form.html', context)
+    
+    if request.method == 'POST':
+        if form.is_valid():
+            form.instance.author = request.user.profile
+            form.instance.parent = comment
+            form.save()
+            return redirect(reverse("post-detail", kwargs={
+                'slug': post_slug}))
+    else:
+        return HttpResponseBadRequest('Bad Request')
+
+    

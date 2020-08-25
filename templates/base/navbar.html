@@ -15,9 +15,9 @@
         </li>
         {% if user.is_authenticated %}
         <li class="nav-pills">
-          <a class="nav-link small {% if request.path == '/user/profile/' %} active {% endif %}" href="{% url 'user-profile'%}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+          <a class="nav-link small {% if '/user/' in request.path %} active {% endif %}" href="{% url 'users' user.username %}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
         </li>
-        <li class="nav-pills dropdown dropleft mr-4">
+        <li class="nav-pills dropdown mr-4">
           <a class="nav-link small" id="navbarAccts" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cogs" aria-hidden="true"></i> Account</a>
           <div class="dropdown-menu" aria-labelledby="navbarAccts">
             <a class="dropdown-item small" href="{% url 'account_change_password' %}"><i class="fa fa-key" aria-hidden="true"></i> Change PW</a>
@@ -57,13 +57,13 @@
 <div class="modal fade" id="search_post" tabindex="-1" role="dialog" aria-labelledby="search_postLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <form action="" class="">
+      <form action="{% url 'post-search'%}" method="GET">
         <div class="rounded rounded-pill shadow-lg">
           <div class="input-group">
             <div class="input-group-prepend">
               <button id="button-addon2" type="submit" class="btn btn-link text-warning"><i class="fa fa-search"></i></button>
             </div>
-            <input id="searchOn" type="search" placeholder="What're you searching for?" aria-describedby="button-addon2" class="form-control form-control-search  border-0 bg-light">
+            <input id="searchOn" value="{{search_history}}" type="search" name="search" placeholder="What're you searching for?" aria-describedby="button-addon2" class="form-control form-control-search  border-0 bg-light">
           </div>
         </div>
       </form>

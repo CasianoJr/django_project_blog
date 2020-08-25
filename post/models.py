@@ -26,7 +26,7 @@ class Post(models.Model):
     title = models.TextField(max_length=1000)
     content = HTMLField('Content')
     featured = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default='2')
     slug = models.SlugField(blank=True, unique=True)
     like = models.ManyToManyField(User, default=None, blank=True)
     date_updated = models.DateTimeField(auto_now=True)
@@ -95,6 +95,9 @@ class Comment(models.Model):
 
     def get_slug(self):
         return self.comment[:10]
+
+    def get_create_child_url(self):
+        return reverse("post-create_child", kwargs={"comment_slug": self.slug, "post_slug": self.post.slug})
 
     def get_child_comments(self):
         return self.childcomment_set.all()

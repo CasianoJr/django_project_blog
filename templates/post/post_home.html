@@ -1,5 +1,8 @@
 {% extends 'base/base.html' %}
 {% block content %}
+    {% if profile %}
+        {% include 'post/bio_profile.html' %}
+    {% endif %}
     {% include 'post/modals_ajax.html' %}
     {% include 'post/home_card_post.html' %}
     {% include 'base/infinite_scroll.html' %}

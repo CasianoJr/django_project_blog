@@ -5,11 +5,18 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<form action="{{post.get_update_url}}" method="POST">
+<form action="{{post.get_update_url}}" method="POST" enctype="multipart/form-data">
     <div class="modal-body">
         {% csrf_token %}
         {{form.media}}
         {{form|crispy}}
+        {{ formset.management_form }}
+        {%for image in formset%}
+        <img class="img-fluid w-50" src="{{ image.instance.thumbnail.url }}">
+        {{image.as_p}}
+        <hr>
+        {%endfor%}
+            <br>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

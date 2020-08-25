@@ -18,6 +18,10 @@
                 <div class="bg-white rounded p-2">
                     {{comment.comment}}
                 </div>
+                <div class="ml-auto mt-auto">
+                   
+                    <button class="btn btn-outline-info small child_comment_reply" data-url="{{comment.get_create_child_url}}"> <i class="fa fa-comments" aria-hidden="true"></i> <span class="small">Reply</span></button>
+                </div>
             </div>
             {% include 'post/child_comment_details.html' %}
         </div>

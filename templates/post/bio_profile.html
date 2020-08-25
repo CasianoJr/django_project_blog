@@ -1,0 +1,30 @@
+<div class="row mt-2">
+    <div class="col-sm-4">
+        <img class="img-fluid rounded shadow" src="{{profile.headshot.url}}" alt="">
+    </div>
+    <div class="col">
+        <div class="row mt-4">
+            <div class="col-sm-3 font-weight-bold">Name:</div>
+            <div class="col-sm-9 font-italic">{{profile.fullname}}</div>
+            <div class="col-sm-3 font-weight-bold">Address:</div>
+            <div class="col-sm-9 font-italic">{{profile.address}}</div>
+            <div class="col-sm-3 font-weight-bold">Contact:</div>
+            <div class="col-sm-9 font-italic">{{profile.contact}}</div>
+        </div>
+        {% if user.profile == profile %}
+        <a href="{% url 'user-update' profile.pk %}" class="btn btn-info float-right text-white p-1"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <span class="small">Update</span> </a>
+        {% endif %}
+    </div>
+</div>
+{% if bio %}
+{% for object in bio %}
+<hr>
+<div class="row">
+    <div class="col-sm-3 font-weight-bold">{{object.field}}:</div>
+    <div class="col-sm-9 font-italic">{{object.field_description}}</div>
+</div>
+{% endfor %}
+{% endif %}
+{% if object_list %}
+<div class="my-5 text-muted small">Recent post ({{object_list.count}}):</div>
+{% endif %}
