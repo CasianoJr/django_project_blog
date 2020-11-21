@@ -1,6 +1,6 @@
 # project_blog
 
-Blogging Project. Backend and frontend is rendered thru Django. Can preform, CRUD, nested comments, user auth and third party storage.
+A blog project,  using Django as backend and frontend. It performs CRUD, nested comments, user authentication, Cloudinary as third party storage, deployed in Heroku. Follow the link to view the demo website
 
 visit website:
 http://exodus-blog.herokuapp.com/ 
